@@ -1,25 +1,57 @@
-import logo from './logo.svg';
+import axios from 'axios';
+import React from 'react';
 import './App.css';
+import SearchBar from './components/Buscador/SearchBar';
+import ImageCard from './components/Buscador/ImageCard';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component{
+
+  state={
+    results: [] //aqui guardo los resultados para poder pintar en la vista
+  }
+  sendSearch = (search)=> {
+      axios.get(`https://api.tvmaze.com/search/shows?q=${search}`)
+      .then((response)=>{
+          console.log(response.data, 'Los datos de respuesta')
+          console.log(response.data, 'Los datos que necesito');
+          this.setState({results: response.data}) //guardo mi busqueda en el estado
+      })
+      .catch((error)=>{
+          console.log('El error es=', error);
+      })
+  }
+
+  componentWillMount(){
+      console.log('1 Antes de que se ejecute el render');
+  }
+  componentDidMount(){
+      console.log('3 Despues que se ejecuta el render');
+  }
+  render(){
+      console.log('2 Se ejecuta el render, se pinta la pantalla');
+      return(
+        <div>
+            <h1>Buscador</h1>
+            <SearchBar emitSearch={this.sendSearch} />
+            <div className='cards'>
+              {
+                this.state.results.map(serie =>(
+                  
+                  <ImageCard key={serie.show.id} identificador={serie.show.name} summary={serie.show.summary} image={
+                    serie.show.image
+                      ? serie.show.image.medium
+                      : "https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg"
+                  }
+    />
+                  
+                ))
+              }
+            </div>
+        </div>
+      )
+  }
 }
 
 export default App;
+
+
