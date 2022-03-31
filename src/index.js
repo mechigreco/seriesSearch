@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+// import App from './App';
 import reportWebVitals from './reportWebVitals';
+// import Menu from './components/Menu/Menu';
+import { Paths } from './routes';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Paths />
+    
   </React.StrictMode>,
   document.getElementById('root')
 );
